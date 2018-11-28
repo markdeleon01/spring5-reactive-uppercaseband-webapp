@@ -68,11 +68,11 @@ public class ArticleServiceImplTest {	//unit tests the service and converters
 		articlesSet.add( getArticle3() );
 		
 		//when
-		when( articleRepository.findAll() ).thenReturn(Flux.just( getArticle1(), getArticle2(), getArticle3() ));
+		when( articleRepository.findAll() ).thenReturn(Flux.fromIterable(articlesSet));
 		
 		//then
 		Flux<ArticleCommand> articles = articleService.getAllArticles();
-		Long count = articles.count().block();	//trigger the service call
+		Long count = articles.count().block();	//trigger the service call and conversions
         assertEquals(3, count.longValue());
         verify(articleRepository, times(1)).findAll();
 	}
