@@ -25,7 +25,7 @@ public class Article {
 	
 	private String description;
 	
-	private Integer displayOrder;
+	private Integer sortOrder;
 	
 	private Media media;
 	

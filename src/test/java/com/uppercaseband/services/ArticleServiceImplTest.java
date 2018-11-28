@@ -1,87 +1,81 @@
 /**
  * 
  */
-package com.uppercaseband.repositories;
+package com.uppercaseband.services;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import static org.junit.Assert.assertEquals;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.uppercaseband.commands.ArticleCommand;
+import com.uppercaseband.converters.ArticleToArticleCommand;
+import com.uppercaseband.converters.MediaToMediaCommand;
 import com.uppercaseband.domain.Article;
 import com.uppercaseband.domain.Category;
 import com.uppercaseband.domain.Media;
 import com.uppercaseband.domain.MediaType;
 import com.uppercaseband.repository.ArticleRepository;
 
+import reactor.core.publisher.Flux;
+
+
 /**
  * @author markdeleon
  *
  */
+public class ArticleServiceImplTest {	//unit tests the service and converters
 
-@RunWith(SpringRunner.class)
-@DataMongoTest					//integration test
-public class ArticleRepositoryTest {
 	
-	@Autowired
-	private ArticleRepository articleRepository;
+	ArticleService articleService;
+	
+	@Mock
+	ArticleRepository articleRepository;
 	
 	
+	final ArticleToArticleCommand articleConverter;
+	
+
+	
+	public ArticleServiceImplTest() {
+		this.articleConverter = new ArticleToArticleCommand(new MediaToMediaCommand());
+	}
+
+
 	@Before
 	public void setUp() {
-		articleRepository.deleteAll().block();
-	}
-	
-	
-	@Test
-	public void testArticleSave() {
+		MockitoAnnotations.initMocks(this);
 		
-    	//given
-    	articleRepository.save(getArticle1()).block();
-    	//the save() acts reactively but there is no subscriber so we need to block() to force the save
-
-    	//when
-        Long count = articleRepository.count().block();	//the block() triggers the whole reactive "train" to take off
-
-        //then
-        assertEquals(Long.valueOf(1L), count);
+		articleService = new ArticleServiceImpl(articleRepository, articleConverter);
 	}
 	
 	
 	@Test
 	public void testGetAllArticles() {
-
+		
 		//given
-		List<Article> articles = Arrays.asList(getArticle1(), getArticle2(), getArticle3());
-		articleRepository.saveAll(articles).then().block();
-
+		Set<Article> articlesSet = new HashSet<>();
+		articlesSet.add( getArticle1() );
+		articlesSet.add( getArticle2() );
+		articlesSet.add( getArticle3() );
+		
 		//when
-		Long count = articleRepository.findAll().count().block();
-
+		when( articleRepository.findAll() ).thenReturn(Flux.just( getArticle1(), getArticle2(), getArticle3() ));
+		
 		//then
-        assertEquals(Long.valueOf(3L), count);		
+		Flux<ArticleCommand> articles = articleService.getAllArticles();
+		Long count = articles.count().block();	//trigger the service call
+        assertEquals(3, count.longValue());
+        verify(articleRepository, times(1)).findAll();
 	}
-	
-	
-	@Test
-	public void testFindByCategory() {
-
-		//given
-		List<Article> articles = Arrays.asList(getArticle1(), getArticle2(), getArticle3());
-		articleRepository.saveAll(articles).then().block();
-
-		//when
-		Long count = articleRepository.findByCategory(Category.HIGHLIGHTS).count().block();
-
-		//then
-        assertEquals(Long.valueOf(2L), count);		
-	}	
 	
 	
 	private Article getArticle1() {
@@ -99,7 +93,7 @@ public class ArticleRepositoryTest {
     	article1.setMedia(article1Media);
 		return article1;
 	}
-
+	
 
 	private Article getArticle2() {
     	Article article2 = new Article();
@@ -132,4 +126,5 @@ public class ArticleRepositoryTest {
     	article3.setMedia(article3Media);
 		return article3;
 	}
+
 }
