@@ -5,15 +5,13 @@ package com.uppercaseband.domain;
 
 import org.springframework.data.annotation.Id;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * @author markdeleon
  *
  */
-@Getter
-@Setter
+@Data
 public class Media {
 
 	@Id

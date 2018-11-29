@@ -4,6 +4,9 @@
 package com.uppercaseband.services;
 
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.springframework.stereotype.Service;
 
 import com.uppercaseband.commands.ArticleCommand;
@@ -48,8 +51,22 @@ public class ArticleServiceImpl implements ArticleService {
 		
 		log.debug("getArticlesByCategory="+category);
 
-		return articleRepository.findByCategory(Category.valueOf(category))
-				.map(articleConverter::convert);
+		try {
+			Category theCategory = Category.valueOf(category);
+			
+			return articleRepository.findByCategory(theCategory)
+					.map(articleConverter::convert);
+			
+		} catch (IllegalArgumentException e) {	//for invalid category
+			
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			String sStackTrace = sw.toString(); // stack trace as a string
+			log.error(sStackTrace);
+			
+			return Flux.empty();
+		}
 	}
 
 }

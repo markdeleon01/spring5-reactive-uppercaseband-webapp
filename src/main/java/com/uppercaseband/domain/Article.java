@@ -6,15 +6,13 @@ package com.uppercaseband.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * @author markdeleon
  *
  */
-@Getter
-@Setter
+@Data
 @Document
 public class Article {
 	
