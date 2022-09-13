@@ -1,5 +1,4 @@
-# spring5-reactive-uppercaseband-webapp
-Spring 5 Reactive Webflux REST backend web application for UPPERCASE band website
+# Spring5 Reactive WebFlux REST backend web application for UPPERCASE band website
 
 [![CircleCI](https://circleci.com/gh/markdeleon01/spring5-reactive-uppercaseband-webapp.svg?style=svg)](https://circleci.com/gh/markdeleon01/spring5-reactive-uppercaseband-webapp)
 
