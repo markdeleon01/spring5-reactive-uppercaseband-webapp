@@ -55,7 +55,7 @@ public class ArticleControllerTest {
 					
 		
 		webTestClient.get()
-					.uri(ArticleController.BASE_URL+"/someCategory")
+					.uri(ArticleController.BASE_URL+"?category=someCategory")
 					.exchange()
 					.expectBodyList(ArticleCommand.class)
 					.hasSize(1);		
@@ -65,12 +65,12 @@ public class ArticleControllerTest {
 	@Test
 	public void testGetArticlesInvalidCategory() {
 		
-		BDDMockito.given( articleService.getArticlesByCategory( "someInvalidCategory" ) )
+		BDDMockito.given( articleService.getArticlesByCategory( "SOMEINVALIDCATEGORY" ) )
 				.willReturn( Flux.empty() );
 					
 		
 		webTestClient.get()
-					.uri(ArticleController.BASE_URL+"/someInvalidCategory")
+					.uri(ArticleController.BASE_URL+"?category=someInvalidCategory")
 					.exchange()
 					.expectBodyList(ArticleCommand.class)
 					.hasSize(0);

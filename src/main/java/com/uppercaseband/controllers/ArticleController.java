@@ -6,7 +6,7 @@ package com.uppercaseband.controllers;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uppercaseband.commands.ArticleCommand;
@@ -40,9 +40,9 @@ public class ArticleController {
 		return articleService.getAllArticles();
 	}
 	
-	
-	@GetMapping(ArticleController.BASE_URL+"/{category}")
-	public Flux<ArticleCommand> getArticlesByCategory(@PathVariable Optional<String> category) {
+
+	@GetMapping(path = ArticleController.BASE_URL, params = "category")
+	public Flux<ArticleCommand> getArticlesByCategory(@RequestParam Optional<String> category) {
 		
 		if (category.isPresent()) {
 			return articleService.getArticlesByCategory(category.get().toUpperCase());
