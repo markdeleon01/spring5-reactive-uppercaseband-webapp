@@ -50,7 +50,7 @@ public class ArticleControllerTest {
 	@Test
 	public void testGetArticlesByCategory() {
 		
-		BDDMockito.given( articleService.getArticlesByCategory( "someCategory" ) )
+		BDDMockito.given( articleService.getArticlesByCategory( "SOMECATEGORY" ) )
 				.willReturn( Flux.just( new ArticleCommand() ));
 					
 		
