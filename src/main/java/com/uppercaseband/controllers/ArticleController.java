@@ -45,7 +45,7 @@ public class ArticleController {
 	public Flux<ArticleCommand> getArticlesByCategory(@PathVariable Optional<String> category) {
 		
 		if (category.isPresent()) {
-			return articleService.getArticlesByCategory(category.get());			
+			return articleService.getArticlesByCategory(category.get().toUpperCase());
 		} else {
 			return Flux.empty();
 		}

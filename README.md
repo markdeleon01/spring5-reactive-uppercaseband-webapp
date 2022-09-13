@@ -4,7 +4,7 @@
 
 [![codecov](https://codecov.io/gh/markdeleon01/spring5-reactive-uppercaseband-webapp/branch/master/graph/badge.svg)](https://codecov.io/gh/markdeleon01/spring5-reactive-uppercaseband-webapp)
 
-This repository is for a RESTful web application built on Spring Framework 5 for my band's website.
+This repository is for a RESTful web application built on Spring5 Reactive WebFlux Framework for my band's website.
 
 This is a Spring Boot web application that serves up articles regarding the UPPERCASE band.
 
