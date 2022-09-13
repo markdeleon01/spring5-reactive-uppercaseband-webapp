@@ -14,3 +14,5 @@ they are stored and retrieved as documents from an embedded MongoDB NoSQL databa
 
 The article resources are exposed with the API route:
 http://localhost:8080/api/v1/articles
+
+JUnit4 tests were written to assert functionalities of the repository, service, and controller classes.
